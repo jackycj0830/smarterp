@@ -56,34 +56,44 @@ export default function DashboardClientContent() {
 
   return (
     <div className="flex-1 flex flex-col p-4 bg-slate-100/50">
-      <Tabs defaultValue="system-maintenance" className="mb-2" onValueChange={setActivePrimaryTab}>
-        <TabsList className="grid w-full grid-cols-7 h-auto p-0 rounded-none bg-transparent gap-0">
-          <TabsTrigger value="online-ops" className="data-[state=active]:bg-sky-600 data-[state=active]:text-white rounded-none border-r border-slate-300 py-1.5 text-xs">網購作業</TabsTrigger>
-          <TabsTrigger value="pos-system" className="data-[state=active]:bg-sky-600 data-[state=active]:text-white rounded-none border-r border-slate-300 py-1.5 text-xs">POS系統</TabsTrigger>
-          <TabsTrigger value="purchase-system" className="data-[state=active]:bg-sky-600 data-[state=active]:text-white rounded-none border-r border-slate-300 py-1.5 text-xs">進貨系統</TabsTrigger>
-          <TabsTrigger value="sales-system" className="data-[state=active]:bg-sky-600 data-[state=active]:text-white rounded-none border-r border-slate-300 py-1.5 text-xs">銷貨系統</TabsTrigger>
-          <TabsTrigger value="inventory-system" className="data-[state=active]:bg-sky-600 data-[state=active]:text-white rounded-none border-r border-slate-300 py-1.5 text-xs">庫存系統</TabsTrigger>
-          <TabsTrigger value="billing-system" className="data-[state=active]:bg-sky-600 data-[state=active]:text-white rounded-none border-r border-slate-300 py-1.5 text-xs">帳款系統</TabsTrigger>
-          <TabsTrigger value="e-invoice" className="data-[state=active]:bg-sky-600 data-[state=active]:text-white rounded-none py-1.5 text-xs">電子發票</TabsTrigger>
-        </TabsList>
-      </Tabs>
+      <div className="w-full overflow-x-auto mb-2">
+        <Tabs defaultValue="system-maintenance" onValueChange={setActivePrimaryTab}>
+          <TabsList className="inline-flex h-auto p-0 rounded-none bg-transparent gap-0">
+            <TabsTrigger value="online-ops" className="data-[state=active]:bg-sky-600 data-[state=active]:text-white rounded-none border-r border-slate-300 py-1.5 text-xs whitespace-nowrap">網購作業</TabsTrigger>
+            <TabsTrigger value="pos-system" className="data-[state=active]:bg-sky-600 data-[state=active]:text-white rounded-none border-r border-slate-300 py-1.5 text-xs whitespace-nowrap">POS系統</TabsTrigger>
+            <TabsTrigger value="purchase-system" className="data-[state=active]:bg-sky-600 data-[state=active]:text-white rounded-none border-r border-slate-300 py-1.5 text-xs whitespace-nowrap">進貨系統</TabsTrigger>
+            <TabsTrigger value="sales-system" className="data-[state=active]:bg-sky-600 data-[state=active]:text-white rounded-none border-r border-slate-300 py-1.5 text-xs whitespace-nowrap">銷貨系統</TabsTrigger>
+            <TabsTrigger value="inventory-system" className="data-[state=active]:bg-sky-600 data-[state=active]:text-white rounded-none border-r border-slate-300 py-1.5 text-xs whitespace-nowrap">庫存系統</TabsTrigger>
+            <TabsTrigger value="billing-system" className="data-[state=active]:bg-sky-600 data-[state=active]:text-white rounded-none border-r border-slate-300 py-1.5 text-xs whitespace-nowrap">帳款系統</TabsTrigger>
+            <TabsTrigger value="e-invoice" className="data-[state=active]:bg-sky-600 data-[state=active]:text-white rounded-none py-1.5 text-xs whitespace-nowrap">電子發票</TabsTrigger>
+          </TabsList>
+        </Tabs>
+      </div>
       
       <div className="border-t border-b border-sky-600 mb-4 bg-sky-600">
         <Tabs defaultValue="system-maintenance-main" onValueChange={setActiveSecondaryTab}>
           <TabsList className="bg-sky-600 p-0 rounded-none justify-start h-8">
-            <TabsTrigger value="system-maintenance-main" className="text-white data-[state=active]:bg-white data-[state=active]:text-sky-700 data-[state=active]:font-semibold rounded-none px-3 py-1 text-sm h-full">系統維護</TabsTrigger>
-            <TabsTrigger value="workflow" className="text-white data-[state=active]:bg-white data-[state=active]:text-sky-700 data-[state=active]:font-semibold rounded-none px-3 py-1 text-sm h-full">作業流程</TabsTrigger>
+            <TabsTrigger value="system-maintenance-main" className="text-white data-[state=active]:bg-white data-[state=active]:text-sky-700 data-[state=active]:font-semibold rounded-none px-3 py-1 text-sm h-full whitespace-nowrap">系統維護</TabsTrigger>
+            <TabsTrigger value="workflow" className="text-white data-[state=active]:bg-white data-[state=active]:text-sky-700 data-[state=active]:font-semibold rounded-none px-3 py-1 text-sm h-full whitespace-nowrap">作業流程</TabsTrigger>
           </TabsList>
         </Tabs>
       </div>
 
       {activePrimaryTab === 'system-maintenance' || activeSecondaryTab === 'system-maintenance-main' ? (
-        <div className="flex-1 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7 gap-4 p-4 rounded-lg bg-white shadow">
+        <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4 rounded-lg bg-white shadow">
           {mainFunctionItems.map((item) => (
             <MainFunctionCard key={item.label} label={item.label} icon={item.icon} description={item.description} />
           ))}
           {/* Placeholder for empty grid cells to maintain layout */}
-          {Array(Math.max(0, 7 - mainFunctionItems.length % 7)).fill(null).map((_, idx) => mainFunctionItems.length % 7 !== 0 ? <div key={`placeholder-${idx}`} /> : null)}
+          {mainFunctionItems.length % 4 !== 0 && Array(4 - (mainFunctionItems.length % 4)).fill(null).map((_, idx) => (
+             <div key={`placeholder-${idx}`} className="hidden lg:block" />
+          ))}
+           {mainFunctionItems.length % 3 !== 0 && Array(3 - (mainFunctionItems.length % 3)).fill(null).map((_, idx) => (
+             <div key={`placeholder-md-${idx}`} className="hidden md:block lg:hidden" />
+          ))}
+           {mainFunctionItems.length % 2 !== 0 && Array(2 - (mainFunctionItems.length % 2)).fill(null).map((_, idx) => (
+             <div key={`placeholder-sm-${idx}`} className="hidden sm:block md:hidden" />
+          ))}
         </div>
       ) : (
         <div className="flex-1 flex items-center justify-center p-4 rounded-lg bg-white shadow">
@@ -117,4 +127,3 @@ export default function DashboardClientContent() {
     </div>
   );
 }
-

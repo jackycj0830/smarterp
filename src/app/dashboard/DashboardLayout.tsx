@@ -16,8 +16,10 @@ import {
 } from '@/components/ui/menubar';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
 import {
+  Menu as MenuIcon, // Renamed Menu to MenuIcon to avoid conflict
   ChevronDown,
   ChevronRight,
   Folder,
@@ -109,7 +111,7 @@ const sidebarNavItems: SidebarNavItem[] = [
 ];
 
 const SidebarNavItemContent: React.FC<{ item: SidebarNavItem; level: number }> = ({ item, level }) => {
-  const [isOpen, setIsOpen] = React.useState(level === 0); // Keep top level open by default
+  const [isOpen, setIsOpen] = React.useState(level === 0); 
   const Icon = item.icon || Folder;
   const ExpandIcon = isOpen ? ChevronDown : ChevronRight;
 
@@ -145,14 +147,43 @@ const SidebarNavItemContent: React.FC<{ item: SidebarNavItem; level: number }> =
   );
 };
 
+const MobileSidebarContent: React.FC = () => (
+  <>
+    <div className="p-2 border-b border-slate-300">
+      <Button variant="outline" className="w-full justify-start text-sm">
+        <ChevronDown className="w-4 h-4 mr-2" />
+        功能選單切換 (M)
+      </Button>
+    </div>
+    <ScrollArea className="flex-1 p-2">
+      <nav className="space-y-1">
+        {sidebarNavItems.map((item) => (
+          <SidebarNavItemContent key={item.id} item={item} level={0} />
+        ))}
+      </nav>
+    </ScrollArea>
+  </>
+);
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex flex-col h-screen bg-slate-100">
       <Menubar className="rounded-none border-b border-slate-300 px-2 lg:px-4 bg-slate-50">
+        <div className="md:hidden mr-2">
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className="h-8 w-8">
+                <MenuIcon className="h-5 w-5" />
+                <span className="sr-only">Open menu</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="left" className="w-64 p-0 bg-slate-50 flex flex-col">
+              <MobileSidebarContent />
+            </SheetContent>
+          </Sheet>
+        </div>
         <MenubarMenu>
           <MenubarTrigger className="font-medium">系統別(Z)</MenubarTrigger>
-          {/* Add menu content if needed */}
         </MenubarMenu>
         <MenubarMenu>
           <MenubarTrigger className="font-medium">編輯(Y)</MenubarTrigger>
@@ -186,40 +217,30 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <MenubarTrigger className="font-medium">公司別(S)</MenubarTrigger>
         </MenubarMenu>
         <div className="flex-grow"></div>
-         <div className="flex items-center space-x-1">
-            <Button variant="ghost" size="sm" className="px-2"><PlusCircle className="w-4 h-4 mr-1" />新增</Button>
-            <Button variant="ghost" size="sm" className="px-2"><Copy className="w-4 h-4 mr-1" />複製</Button>
-            <Button variant="ghost" size="sm" className="px-2"><FileEdit className="w-4 h-4 mr-1" />修改</Button>
-            <Button variant="ghost" size="sm" className="px-2"><Trash2 className="w-4 h-4 mr-1" />刪除</Button>
-            <Button variant="ghost" size="sm" className="px-2"><Search className="w-4 h-4 mr-1" />查詢</Button>
-            <Button variant="ghost" size="sm" className="px-2"><Printer className="w-4 h-4 mr-1" />列印</Button>
-            <GripVertical className="h-5 w-5 text-slate-400" />
-            <Button variant="ghost" size="sm" className="px-2"><ChevronFirst className="w-4 h-4 mr-1" />首筆</Button>
-            <Button variant="ghost" size="sm" className="px-2"><ChevronLeft className="w-4 h-4 mr-1" />上筆</Button>
-            <Button variant="ghost" size="sm" className="px-2"><ChevronRight className="w-4 h-4 mr-1" />下筆</Button>
-            <Button variant="ghost" size="sm" className="px-2"><ChevronLast className="w-4 h-4 mr-1" />末筆</Button>
-            <GripVertical className="h-5 w-5 text-slate-400" />
-            <Button variant="ghost" size="sm" className="px-2 text-red-600"><Power className="w-4 h-4 mr-1" />離開</Button>
-            <Button variant="ghost" size="sm" className="px-2"><Palette className="w-4 h-4 mr-1" />待辦</Button>
-            <Button variant="ghost" size="sm" className="px-2"><Info className="w-4 h-4 mr-1" />選單</Button>
+         <div className="flex-shrink-0 min-w-0 overflow-x-auto">
+           <div className="flex items-center space-x-1 py-1">
+              <Button variant="ghost" size="sm" className="px-2"><PlusCircle className="w-4 h-4 mr-1" />新增</Button>
+              <Button variant="ghost" size="sm" className="px-2"><Copy className="w-4 h-4 mr-1" />複製</Button>
+              <Button variant="ghost" size="sm" className="px-2"><FileEdit className="w-4 h-4 mr-1" />修改</Button>
+              <Button variant="ghost" size="sm" className="px-2"><Trash2 className="w-4 h-4 mr-1" />刪除</Button>
+              <Button variant="ghost" size="sm" className="px-2"><Search className="w-4 h-4 mr-1" />查詢</Button>
+              <Button variant="ghost" size="sm" className="px-2"><Printer className="w-4 h-4 mr-1" />列印</Button>
+              <GripVertical className="h-5 w-5 text-slate-400" />
+              <Button variant="ghost" size="sm" className="px-2"><ChevronFirst className="w-4 h-4 mr-1" />首筆</Button>
+              <Button variant="ghost" size="sm" className="px-2"><ChevronLeft className="w-4 h-4 mr-1" />上筆</Button>
+              <Button variant="ghost" size="sm" className="px-2"><ChevronRight className="w-4 h-4 mr-1" />下筆</Button>
+              <Button variant="ghost" size="sm" className="px-2"><ChevronLast className="w-4 h-4 mr-1" />末筆</Button>
+              <GripVertical className="h-5 w-5 text-slate-400" />
+              <Button variant="ghost" size="sm" className="px-2 text-red-600"><Power className="w-4 h-4 mr-1" />離開</Button>
+              <Button variant="ghost" size="sm" className="px-2"><Palette className="w-4 h-4 mr-1" />待辦</Button>
+              <Button variant="ghost" size="sm" className="px-2"><Info className="w-4 h-4 mr-1" />選單</Button>
+           </div>
          </div>
       </Menubar>
 
       <div className="flex flex-1 overflow-hidden">
-        <aside className="w-64 bg-slate-50 border-r border-slate-300 flex flex-col">
-          <div className="p-2 border-b border-slate-300">
-            <Button variant="outline" className="w-full justify-start text-sm">
-              <ChevronDown className="w-4 h-4 mr-2" />
-              功能選單切換 (M)
-            </Button>
-          </div>
-          <ScrollArea className="flex-1 p-2">
-            <nav className="space-y-1">
-              {sidebarNavItems.map((item) => (
-                <SidebarNavItemContent key={item.id} item={item} level={0} />
-              ))}
-            </nav>
-          </ScrollArea>
+        <aside className="hidden md:flex w-64 bg-slate-50 border-r border-slate-300 flex-col">
+          <MobileSidebarContent />
         </aside>
 
         <main className="flex-1 flex flex-col overflow-y-auto">
