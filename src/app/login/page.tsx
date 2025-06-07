@@ -99,7 +99,7 @@ export default function LoginPage() {
             
             <div className="flex justify-center my-6 md:my-0">
               <Image 
-                src="https://placehold.co/210x210.png" 
+                src="/qr_code_login.png" 
                 width={210}
                 height={210}
                 data-ai-hint="QR code" 
