@@ -2,24 +2,10 @@
 'use client';
 
 import * as React from 'react';
-import {
-  Menubar,
-  MenubarContent,
-  MenubarItem,
-  MenubarMenu,
-  MenubarSeparator,
-  MenubarShortcut,
-  MenubarSub,
-  MenubarSubContent,
-  MenubarSubTrigger,
-  MenubarTrigger,
-} from '@/components/ui/menubar';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
 import {
-  Menu as MenuIcon, // Renamed Menu to MenuIcon to avoid conflict
   ChevronDown,
   ChevronRight,
   Folder,
@@ -37,33 +23,11 @@ import {
   TerminalSquare,
   UserPlus,
   KeyRound,
-  ShieldCheck,
-  ClipboardList,
-  FolderOpenDot,
   FileCode,
   UsersRound,
   FileLock2,
   Settings2,
-  Workflow,
-  ShoppingBag,
-  Ticket,
-  Contact,
-  Building,
-  Power,
-  Search,
-  Printer,
-  ChevronLeft,
-  ChevronFirst,
-  ChevronLast,
-  FileEdit,
-  Trash2,
-  Copy,
-  PlusCircle,
-  GripVertical,
   Bell,
-  LogOut,
-  Palette,
-  Info
 } from 'lucide-react';
 
 interface SidebarNavItem {
@@ -91,27 +55,38 @@ const sidebarNavItems: SidebarNavItem[] = [
     ],
   },
   { id: 'permission-settings', label: '權限設定', icon: UsersRound, children: [
-     { id: 'ps-placeholder1', label: '使用者管理', icon: Users },
+     { id: 'ps-user-management', label: '使用者管理', icon: Users },
+     { id: 'ps-role-management', label: '角色權限設定', icon: FileLock2},
   ] },
   { id: 'basic-data', label: '基本資料', icon: Database, children: [
-     { id: 'bd-placeholder1', label: '客戶資料', icon: Contact },
+     { id: 'bd-customer', label: '客戶資料', icon: Users },
+     { id: 'bd-vendor', label: '廠商資料', icon: Briefcase },
+     { id: 'bd-item', label: '品號資料', icon: FileText },
   ] },
   { id: 'purchase-system', label: '進貨系統', icon: ShoppingCart, children: [
-    { id: 'psys-placeholder1', label: '進貨單', icon: Receipt },
+    { id: 'psys-po', label: '採購單', icon: Receipt },
+    { id: 'psys-grn', label: '進貨單', icon: Receipt },
   ]},
   { id: 'sales-system', label: '銷貨系統', icon: Briefcase, children: [
-    { id: 'ssys-placeholder1', label: '銷貨單', icon: Receipt },
+    { id: 'ssys-so', label: '訂單', icon: Receipt },
+    { id: 'ssys-ship', label: '銷貨單', icon: Receipt },
   ]},
   { id: 'inventory-system', label: '庫存系統', icon: Home, children: [
-    { id: 'isys-placeholder1', label: '庫存查詢', icon: Search },
+    { id: 'isys-query', label: '庫存查詢', icon: FileSearch2IconProperty },
+    { id: 'isys-transfer', label: '調撥作業', icon: Replace },
   ]},
-  { id: 'invoice-system', label: '發票系統', icon: Ticket, children: [
-    { id: 'invsys-placeholder1', label: '電子發票', icon: Mail },
+  { id: 'invoice-system', label: '發票系統', icon: TicketIconProperty, children: [
+    { id: 'invsys-einvoice', label: '電子發票', icon: Mail },
   ]},
 ];
 
-const SidebarNavItemContent: React.FC<{ item: SidebarNavItem; level: number }> = ({ item, level }) => {
-  const [isOpen, setIsOpen] = React.useState(level === 0); 
+// Placeholder icons if specific ones are not found or for variety
+const FileSearch2IconProperty = FileText; // Using FileText as a placeholder for FileSearch2
+const TicketIconProperty = Receipt; // Using Receipt as a placeholder for Ticket
+const Replace = FileText; // Using FileText as a placeholder
+
+const SidebarNavItemContent: React.FC<{ item: SidebarNavItem; level: number; searchTerm: string }> = ({ item, level, searchTerm }) => {
+  const [isOpen, setIsOpen] = React.useState(level === 0 || (searchTerm && item.label.toLowerCase().includes(searchTerm.toLowerCase())));
   const Icon = item.icon || Folder;
   const ExpandIcon = isOpen ? ChevronDown : ChevronRight;
 
@@ -120,26 +95,59 @@ const SidebarNavItemContent: React.FC<{ item: SidebarNavItem; level: number }> =
       setIsOpen(!isOpen);
     }
   };
+  
+  React.useEffect(() => {
+    if (searchTerm) {
+      const hasMatchingChild = item.children?.some(child => child.label.toLowerCase().includes(searchTerm.toLowerCase()));
+      if (item.label.toLowerCase().includes(searchTerm.toLowerCase()) || hasMatchingChild) {
+        setIsOpen(true);
+      } else if (!hasMatchingChild && !item.label.toLowerCase().includes(searchTerm.toLowerCase()) && level !== 0){
+         setIsOpen(false);
+      }
+    } else {
+       setIsOpen(level === 0); // Default open for top-level items if no search term
+    }
+  }, [searchTerm, item.label, item.children, level]);
+
+
+  const isMatch = searchTerm && item.label.toLowerCase().includes(searchTerm.toLowerCase());
+  const hasVisibleChild = item.children?.some(child => child.label.toLowerCase().includes(searchTerm.toLowerCase()) || isOpen && child.children?.some(c => c.label.toLowerCase().includes(searchTerm.toLowerCase())));
+
+  if (searchTerm && !isMatch && !hasVisibleChild && item.children && item.children.length > 0 && !item.children.some(child => child.label.toLowerCase().includes(searchTerm.toLowerCase()) || child.children?.some(c => c.label.toLowerCase().includes(searchTerm.toLowerCase())))) {
+    let parentHasMatch = false;
+    // This logic might need to be passed down or handled globally if deep nested search highlighting is needed across non-expanded parents
+    if (searchTerm && !item.label.toLowerCase().includes(searchTerm.toLowerCase())) {
+        const checkChildren = (children?: SidebarNavItem[]): boolean => {
+            if (!children) return false;
+            return children.some(child => child.label.toLowerCase().includes(searchTerm.toLowerCase()) || checkChildren(child.children));
+        };
+        if (!checkChildren(item.children)) return null; 
+    }
+  }
+
 
   return (
-    <div style={{ paddingLeft: `${level * 16}px` }}>
+    <div style={{ paddingLeft: `${level * 12}px` }}>
       <Button
         variant="ghost"
-        className="w-full justify-start h-8 px-2 py-1 text-sm font-normal"
+        className={cn(
+            "w-full justify-start h-8 px-2 py-1 text-sm font-normal",
+            isMatch ? "bg-accent text-accent-foreground" : ""
+        )}
         onClick={handleToggle}
         aria-expanded={isOpen}
       >
         {item.children && item.children.length > 0 && (
-          <ExpandIcon className="h-4 w-4 mr-2 flex-shrink-0" />
+          <ExpandIcon className="h-4 w-4 mr-1.5 flex-shrink-0 transition-transform duration-200" />
         )}
-        {!item.children && <div className="w-4 mr-2 flex-shrink-0"></div>}
-        <Icon className="h-4 w-4 mr-2 flex-shrink-0 text-sky-600" />
-        <span>{item.label}</span>
+        {!item.children && <div className="w-4 mr-1.5 flex-shrink-0"></div>}
+        <Icon className="h-4 w-4 mr-1.5 flex-shrink-0 text-sky-600" />
+        <span className="truncate">{item.label}</span>
       </Button>
       {isOpen && item.children && (
-        <div className="mt-1">
+        <div className="mt-0.5">
           {item.children.map((child) => (
-            <SidebarNavItemContent key={child.id} item={child} level={level + 1} />
+            <SidebarNavItemContent key={child.id} item={child} level={level + 1} searchTerm={searchTerm} />
           ))}
         </div>
       )}
@@ -147,100 +155,37 @@ const SidebarNavItemContent: React.FC<{ item: SidebarNavItem; level: number }> =
   );
 };
 
-const MobileSidebarContent: React.FC = () => (
-  <>
-    <div className="p-2 border-b border-slate-300">
-      <Button variant="outline" className="w-full justify-start text-sm">
-        <ChevronDown className="w-4 h-4 mr-2" />
-        功能選單切換 (M)
-      </Button>
-    </div>
-    <ScrollArea className="flex-1 p-2">
-      <nav className="space-y-1">
-        {sidebarNavItems.map((item) => (
-          <SidebarNavItemContent key={item.id} item={item} level={0} />
-        ))}
-      </nav>
-    </ScrollArea>
-  </>
-);
+const SidebarContent: React.FC = () => {
+    const [searchTerm, setSearchTerm] = React.useState('');
+    return (
+      <>
+        <div className="p-2 border-b border-slate-300">
+          <Input 
+            placeholder="搜尋選單..." 
+            className="h-8 text-xs"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+        <ScrollArea className="flex-1 p-2">
+          <nav className="space-y-0.5">
+            {sidebarNavItems.map((item) => (
+              <SidebarNavItemContent key={item.id} item={item} level={0} searchTerm={searchTerm}/>
+            ))}
+          </nav>
+        </ScrollArea>
+      </>
+    );
+}
+
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex flex-col h-screen bg-slate-100">
-      <Menubar className="rounded-none border-b border-slate-300 px-2 lg:px-4 bg-slate-50">
-        <div className="md:hidden mr-2">
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-8 w-8">
-                <MenuIcon className="h-5 w-5" />
-                <span className="sr-only">Open menu</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="left" className="w-64 p-0 bg-slate-50 flex flex-col">
-              <MobileSidebarContent />
-            </SheetContent>
-          </Sheet>
-        </div>
-        <MenubarMenu>
-          <MenubarTrigger className="font-medium">系統別(Z)</MenubarTrigger>
-        </MenubarMenu>
-        <MenubarMenu>
-          <MenubarTrigger className="font-medium">編輯(Y)</MenubarTrigger>
-        </MenubarMenu>
-        <MenubarMenu>
-          <MenubarTrigger className="font-medium">系統設定(X)</MenubarTrigger>
-          <MenubarContent>
-            <MenubarItem>系統代碼(W)</MenubarItem>
-            <MenubarItem>系統參數(X)</MenubarItem>
-            <MenubarItem>系統通知(Y)</MenubarItem>
-            <MenubarSeparator />
-            <MenubarItem>資料庫備份(Z)</MenubarItem>
-          </MenubarContent>
-        </MenubarMenu>
-        <MenubarMenu>
-          <MenubarTrigger className="font-medium">權限設定(W)</MenubarTrigger>
-        </MenubarMenu>
-        <MenubarMenu>
-          <MenubarTrigger className="font-medium">基本資料(V)</MenubarTrigger>
-        </MenubarMenu>
-        <MenubarMenu>
-          <MenubarTrigger className="font-medium">視窗(U)</MenubarTrigger>
-        </MenubarMenu>
-        <MenubarMenu>
-          <MenubarTrigger className="font-medium">說明(T)</MenubarTrigger>
-           <MenubarContent>
-            <MenubarItem>關於 <MenubarShortcut>⌘I</MenubarShortcut></MenubarItem>
-          </MenubarContent>
-        </MenubarMenu>
-        <MenubarMenu>
-          <MenubarTrigger className="font-medium">公司別(S)</MenubarTrigger>
-        </MenubarMenu>
-        <div className="flex-grow"></div>
-         <div className="flex-shrink-0 min-w-0 overflow-x-auto">
-           <div className="flex items-center space-x-1 py-1">
-              <Button variant="ghost" size="sm" className="px-2"><PlusCircle className="w-4 h-4 mr-1" />新增</Button>
-              <Button variant="ghost" size="sm" className="px-2"><Copy className="w-4 h-4 mr-1" />複製</Button>
-              <Button variant="ghost" size="sm" className="px-2"><FileEdit className="w-4 h-4 mr-1" />修改</Button>
-              <Button variant="ghost" size="sm" className="px-2"><Trash2 className="w-4 h-4 mr-1" />刪除</Button>
-              <Button variant="ghost" size="sm" className="px-2"><Search className="w-4 h-4 mr-1" />查詢</Button>
-              <Button variant="ghost" size="sm" className="px-2"><Printer className="w-4 h-4 mr-1" />列印</Button>
-              <GripVertical className="h-5 w-5 text-slate-400" />
-              <Button variant="ghost" size="sm" className="px-2"><ChevronFirst className="w-4 h-4 mr-1" />首筆</Button>
-              <Button variant="ghost" size="sm" className="px-2"><ChevronLeft className="w-4 h-4 mr-1" />上筆</Button>
-              <Button variant="ghost" size="sm" className="px-2"><ChevronRight className="w-4 h-4 mr-1" />下筆</Button>
-              <Button variant="ghost" size="sm" className="px-2"><ChevronLast className="w-4 h-4 mr-1" />末筆</Button>
-              <GripVertical className="h-5 w-5 text-slate-400" />
-              <Button variant="ghost" size="sm" className="px-2 text-red-600"><Power className="w-4 h-4 mr-1" />離開</Button>
-              <Button variant="ghost" size="sm" className="px-2"><Palette className="w-4 h-4 mr-1" />待辦</Button>
-              <Button variant="ghost" size="sm" className="px-2"><Info className="w-4 h-4 mr-1" />選單</Button>
-           </div>
-         </div>
-      </Menubar>
-
-      <div className="flex flex-1 overflow-hidden">
-        <aside className="hidden md:flex w-64 bg-slate-50 border-r border-slate-300 flex-col">
-          <MobileSidebarContent />
+      {/* Menubar has been removed as per user request */}
+      <div className="flex flex-1 overflow-hidden pt-2 md:pt-0"> {/* Added padding top for when menubar is removed */}
+        <aside className="hidden md:flex w-56 bg-slate-50 border-r border-slate-300 flex-col">
+          <SidebarContent />
         </aside>
 
         <main className="flex-1 flex flex-col overflow-y-auto">
