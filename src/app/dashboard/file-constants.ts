@@ -1,4 +1,6 @@
 
-export const README_FILENAME = 'README.md';
-export const SPEC_FILENAME = 'spec.md';
-export const TODOLIST_FILENAME = 'todolist.md';
+// This file is no longer needed for the new dashboard design
+// as it does not interact with markdown files directly.
+// It can be safely removed or kept empty if other dashboard constants are needed later.
+
+export {}; // To make it a module

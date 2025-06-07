@@ -1,27 +1,26 @@
+# 專案待辦事項清單
 
-# Project TODO List
+此檔案用於追蹤與**您的**專案相關的任務。請使用 RefactorFlow 應用程式進行編輯。
 
-This file is for tracking tasks related to YOUR project. Edit it using the RefactorFlow application.
+## 第一階段：設定與核心功能
 
-## Phase 1: Setup & Core Features
+- [ ] 在 GitHub 上初始化專案儲存庫。
+- [ ] 在 `spec.md` 中定義詳細的專案需求。
+- [ ] 為關鍵 UI 畫面建立初步線框圖。
+- [ ] 設定資料庫結構。
+- [ ] 實作使用者驗證功能。
 
-- [ ] Initialize project repository on GitHub.
-- [ ] Define detailed project requirements in `spec.md`.
-- [ ] Create initial wireframes for key UI screens.
-- [ ] Set up database schema.
-- [ ] Implement user authentication.
+## 第二階段：功能開發
 
-## Phase 2: Feature Development
+- [ ] 開發儀表板 UI。
+- [ ] 根據 `spec.md` 實作 [特定功能 X]。
+- [ ] 根據 `spec.md` 實作 [特定功能 Y]。
 
-- [ ] Develop Dashboard UI.
-- [ ] Implement [Specific Feature X] as per `spec.md`.
-- [ ] Implement [Specific Feature Y] as per `spec.md`.
+## 第三階段：測試與部署
 
-## Phase 3: Testing & Deployment
+- [ ] 為關鍵元件編寫單元測試。
+- [ ] 進行端對端測試。
+- [ ] 準備部署腳本。
+- [ ] 部署至生產環境。
 
-- [ ] Write unit tests for critical components.
-- [ ] Conduct end-to-end testing.
-- [ ] Prepare deployment scripts.
-- [ ] Deploy to production environment.
-
-Use the AI suggestions feature in RefactorFlow to ensure tasks align with your README and specifications.
+使用 RefactorFlow 中的 AI 建議功能，以確保任務與您的 README 和規格說明保持一致。

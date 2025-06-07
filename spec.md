@@ -1,21 +1,20 @@
+# 專案規格
 
-# Project Specifications
+此檔案旨在存放**您的**專案規格。您可以使用 RefactorFlow 應用程式來編輯它。
 
-This file is intended to hold the specifications for YOUR project. You can edit it using the RefactorFlow application.
+## 範例區段：核心功能
 
-## Example Section: Core Functionality
+- **使用者驗證**：
+  - 使用者應能夠使用電子郵件和密碼註冊。
+  - 使用者應能夠登入和登出。
+- **儀表板**：
+  - 顯示關鍵專案指標。
+  - 允許導覽至其他區段。
 
-- **User Authentication**:
-  - Users should be able to sign up using email and password.
-  - Users should be able to log in and log out.
-- **Dashboard**:
-  - Display key project metrics.
-  - Allow navigation to other sections.
+## 範例區段：技術需求
 
-## Example Section: Technical Requirements
+- **資料庫**：PostgreSQL
+- **後端框架**：Next.js (API 路由或伺服器動作)
+- **前端框架**：Next.js (React)
 
-- **Database**: PostgreSQL
-- **Backend Framework**: Next.js (API Routes or Server Actions)
-- **Frontend Framework**: Next.js (React)
-
-Use the AI suggestions feature in RefactorFlow to keep this synchronized with your README and TODO list.
+使用 RefactorFlow 中的 AI 建議功能，以保持此文件與您的 README 和待辦事項清單同步。
