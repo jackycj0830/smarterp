@@ -4,6 +4,7 @@
 import * as React from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
 import {
   ChevronDown,
@@ -25,9 +26,10 @@ import {
   FileLock2,
   Settings2,
   Bell,
-  FileSearch2, // Added
-  Ticket,      // Added
-  Replace,     // Added
+  FileSearch2,
+  Ticket,
+  Replace,
+  Menu, // Added Menu icon
 } from 'lucide-react';
 
 interface SidebarNavItem {
@@ -106,20 +108,20 @@ const SidebarNavItemContent: React.FC<{ item: SidebarNavItem; level: number; sea
 
 
   const isMatch = searchTerm && item.label.toLowerCase().includes(searchTerm.toLowerCase());
-  const hasVisibleChild = item.children?.some(child => child.label.toLowerCase().includes(searchTerm.toLowerCase()) || isOpen && child.children?.some(c => c.label.toLowerCase().includes(searchTerm.toLowerCase())));
-
-  if (searchTerm && !isMatch && !hasVisibleChild && item.children && item.children.length > 0 && !item.children.some(child => child.label.toLowerCase().includes(searchTerm.toLowerCase()) || child.children?.some(c => c.label.toLowerCase().includes(searchTerm.toLowerCase())))) {
-    let parentHasMatch = false;
-    
-    if (searchTerm && !item.label.toLowerCase().includes(searchTerm.toLowerCase())) {
-        const checkChildren = (children?: SidebarNavItem[]): boolean => {
-            if (!children) return false;
-            return children.some(child => child.label.toLowerCase().includes(searchTerm.toLowerCase()) || checkChildren(child.children));
-        };
-        if (!checkChildren(item.children)) return null; 
+  
+  // Determine if this item or any of its children (recursively) should be visible based on search
+  const shouldBeVisible = (currentItem: SidebarNavItem): boolean => {
+    if (!searchTerm) return true; // Always visible if no search term
+    if (currentItem.label.toLowerCase().includes(searchTerm.toLowerCase())) return true;
+    if (currentItem.children) {
+      return currentItem.children.some(child => shouldBeVisible(child));
     }
-  }
+    return false;
+  };
 
+  if (searchTerm && !shouldBeVisible(item)) {
+    return null; // Hide item if it and its children don't match search
+  }
 
   return (
     <div style={{ paddingLeft: `${level * 12}px` }}>
@@ -155,7 +157,6 @@ const SidebarContent: React.FC = () => {
     return (
       <>
         <div className="p-2 border-b border-slate-300">
-          {/* Using a regular input, assuming shadcn Input might not be styled for this specific context or to avoid import if not needed */}
           <input 
             type="text"
             placeholder="搜尋選單..." 
@@ -177,10 +178,29 @@ const SidebarContent: React.FC = () => {
 
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+  const [isMobileSheetOpen, setIsMobileSheetOpen] = React.useState(false);
+
   return (
     <div className="flex flex-col h-screen bg-slate-100">
       
-      <div className="flex flex-1 overflow-hidden pt-2 md:pt-0"> 
+      {/* Mobile Header with Hamburger Menu */}
+      <div className="md:hidden flex items-center justify-between p-2 border-b border-slate-300 bg-slate-50">
+        <Sheet open={isMobileSheetOpen} onOpenChange={setIsMobileSheetOpen}>
+          <SheetTrigger asChild>
+            <Button variant="outline" size="icon" className="h-8 w-8">
+              <Menu className="h-5 w-5 text-sky-700" />
+              <span className="sr-only">開啟選單</span>
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left" className="p-0 w-64 bg-slate-50 border-r border-slate-300">
+            <SidebarContent />
+          </SheetContent>
+        </Sheet>
+        <h1 className="text-lg font-semibold text-sky-700">儀表板</h1>
+        <div className="w-8"></div> {/* Spacer to balance the button */}
+      </div>
+
+      <div className="flex flex-1 overflow-hidden"> 
         <aside className="hidden md:flex w-56 bg-slate-50 border-r border-slate-300 flex-col">
           <SidebarContent />
         </aside>
@@ -192,4 +212,3 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     </div>
   );
 }
-
