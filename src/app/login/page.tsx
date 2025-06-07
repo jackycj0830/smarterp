@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { User, Eye, X } from 'lucide-react';
+import { User, Eye } from 'lucide-react';
 import Image from 'next/image';
 
 const translations = {
@@ -22,7 +22,6 @@ const translations = {
     passwordPlaceholder: '密碼',
     systemSelectPlaceholder: '選擇系統',
     loginButton: '登入',
-    closeButtonLabel: '關閉',
   },
   en: {
     companyName: 'Winstek',
@@ -37,7 +36,6 @@ const translations = {
     passwordPlaceholder: 'Password',
     systemSelectPlaceholder: 'Select System',
     loginButton: 'Login',
-    closeButtonLabel: 'Close',
   },
 };
 
@@ -56,9 +54,6 @@ export default function LoginPage() {
           <span className="text-2xl lg:text-3xl font-bold text-red-600 mr-1">W</span>
           <span className="text-neutral-700 font-semibold text-base lg:text-lg">{t.companyName}</span>
         </div>
-        <Button variant="ghost" size="icon" aria-label={t.closeButtonLabel} className="text-neutral-500 hover:text-neutral-700">
-          <X className="h-5 w-5 lg:h-6 lg:w-6" />
-        </Button>
       </div>
 
       <div className="w-full max-w-4xl lg:max-w-5xl bg-white shadow-2xl rounded-lg flex overflow-hidden">
