@@ -50,25 +50,11 @@ const MainFunctionCard: React.FC<{ label: string; icon: React.ElementType; descr
 
 
 export default function DashboardClientContent() {
-  const [activePrimaryTab, setActivePrimaryTab] = React.useState('system-maintenance');
   const [activeSecondaryTab, setActiveSecondaryTab] = React.useState('system-maintenance-main');
 
 
   return (
     <div className="flex-1 flex flex-col p-4 bg-slate-100/50">
-      <div className="w-full overflow-x-auto mb-2">
-        <Tabs defaultValue="system-maintenance" onValueChange={setActivePrimaryTab}>
-          <TabsList className="inline-flex h-auto p-0 rounded-none bg-transparent gap-0">
-            <TabsTrigger value="online-ops" className="data-[state=active]:bg-sky-600 data-[state=active]:text-white rounded-none border-r border-slate-300 py-1.5 text-xs whitespace-nowrap">網購作業</TabsTrigger>
-            <TabsTrigger value="pos-system" className="data-[state=active]:bg-sky-600 data-[state=active]:text-white rounded-none border-r border-slate-300 py-1.5 text-xs whitespace-nowrap">POS系統</TabsTrigger>
-            <TabsTrigger value="purchase-system" className="data-[state=active]:bg-sky-600 data-[state=active]:text-white rounded-none border-r border-slate-300 py-1.5 text-xs whitespace-nowrap">進貨系統</TabsTrigger>
-            <TabsTrigger value="sales-system" className="data-[state=active]:bg-sky-600 data-[state=active]:text-white rounded-none border-r border-slate-300 py-1.5 text-xs whitespace-nowrap">銷貨系統</TabsTrigger>
-            <TabsTrigger value="inventory-system" className="data-[state=active]:bg-sky-600 data-[state=active]:text-white rounded-none border-r border-slate-300 py-1.5 text-xs whitespace-nowrap">庫存系統</TabsTrigger>
-            <TabsTrigger value="billing-system" className="data-[state=active]:bg-sky-600 data-[state=active]:text-white rounded-none border-r border-slate-300 py-1.5 text-xs whitespace-nowrap">帳款系統</TabsTrigger>
-            <TabsTrigger value="e-invoice" className="data-[state=active]:bg-sky-600 data-[state=active]:text-white rounded-none py-1.5 text-xs whitespace-nowrap">電子發票</TabsTrigger>
-          </TabsList>
-        </Tabs>
-      </div>
       
       <div className="border-t border-b border-sky-600 mb-4 bg-sky-600">
         <Tabs defaultValue="system-maintenance-main" onValueChange={setActiveSecondaryTab}>
@@ -79,7 +65,7 @@ export default function DashboardClientContent() {
         </Tabs>
       </div>
 
-      {activePrimaryTab === 'system-maintenance' || activeSecondaryTab === 'system-maintenance-main' ? (
+      {activeSecondaryTab === 'system-maintenance-main' ? (
         <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4 rounded-lg bg-white shadow">
           {mainFunctionItems.map((item) => (
             <MainFunctionCard key={item.label} label={item.label} icon={item.icon} description={item.description} />
@@ -100,17 +86,7 @@ export default function DashboardClientContent() {
           <div className="text-center">
             <ClipboardList className="w-16 h-16 text-slate-400 mx-auto mb-4" />
             <p className="text-slate-500">
-              「{
-                {
-                  'online-ops': '網購作業',
-                  'pos-system': 'POS系統',
-                  'purchase-system': '進貨系統',
-                  'sales-system': '銷貨系統',
-                  'inventory-system': '庫存系統',
-                  'billing-system': '帳款系統',
-                  'e-invoice': '電子發票'
-                }[activePrimaryTab] || '選定模組'
-              }」
+              「選定模組」
               的 「{
                 {
                   'workflow': '作業流程'
