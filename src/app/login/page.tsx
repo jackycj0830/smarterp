@@ -2,11 +2,13 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { User, Eye } from 'lucide-react';
 import Image from 'next/image';
+import { useToast } from '@/hooks/use-toast';
 
 const translations = {
   zh: {
@@ -22,6 +24,8 @@ const translations = {
     passwordPlaceholder: '密碼',
     systemSelectPlaceholder: '選擇系統',
     loginButton: '登入',
+    loginErrorTitle: '登入失敗',
+    loginErrorMessage: '用戶名或密碼不正確。',
   },
   en: {
     companyName: 'Winstek',
@@ -36,15 +40,34 @@ const translations = {
     passwordPlaceholder: 'Password',
     systemSelectPlaceholder: 'Select System',
     loginButton: 'Login',
+    loginErrorTitle: 'Login Failed',
+    loginErrorMessage: 'Incorrect username or password.',
   },
 };
 
 export default function LoginPage() {
   const [language, setLanguage] = useState<'zh' | 'en'>('zh');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const router = useRouter();
+  const { toast } = useToast();
   const t = translations[language];
 
   const handleLanguageChange = (value: string) => {
     setLanguage(value as 'zh' | 'en');
+  };
+
+  const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (username === 'admin' && password === '123456') {
+      router.push('/dashboard');
+    } else {
+      toast({
+        title: t.loginErrorTitle,
+        description: t.loginErrorMessage,
+        variant: 'destructive',
+      });
+    }
   };
 
   return (
@@ -87,7 +110,7 @@ export default function LoginPage() {
              <div className="hidden md:block h-8"></div>
           </div>
 
-          <div className="p-6 md:p-8 lg:p-10 flex flex-col justify-center space-y-5 bg-gray-50 md:bg-white rounded-r-lg">
+          <form onSubmit={handleLogin} className="p-6 md:p-8 lg:p-10 flex flex-col justify-center space-y-5 bg-gray-50 md:bg-white rounded-r-lg">
             <div>
               <label htmlFor="language-select" className="sr-only">{t.languageSelectPlaceholder}</label>
               <Select defaultValue={language} onValueChange={handleLanguageChange}>
@@ -104,13 +127,28 @@ export default function LoginPage() {
             <div className="relative">
               <label htmlFor="username" className="sr-only">{t.usernamePlaceholder}</label>
               <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none" />
-              <Input id="username" placeholder={t.usernamePlaceholder} defaultValue="DS" className="pl-9 text-sm h-10" />
+              <Input 
+                id="username" 
+                placeholder={t.usernamePlaceholder} 
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="pl-9 text-sm h-10" 
+                required
+              />
             </div>
 
             <div className="relative">
               <label htmlFor="password" className="sr-only">{t.passwordPlaceholder}</label>
               <Eye className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none" />
-              <Input id="password" type="password" placeholder={t.passwordPlaceholder} className="pl-9 text-sm h-10" />
+              <Input 
+                id="password" 
+                type="password" 
+                placeholder={t.passwordPlaceholder} 
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="pl-9 text-sm h-10" 
+                required
+              />
             </div>
             
             <div>
@@ -129,7 +167,7 @@ export default function LoginPage() {
             <Button type="submit" className="w-full !bg-[#0052A5] hover:!bg-[#004182] text-white font-semibold py-2.5 text-base h-10">
               {t.loginButton}
             </Button>
-          </div>
+          </form>
         </div>
       </div>
     </div>
