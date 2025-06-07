@@ -4,7 +4,7 @@
 import * as React from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
 import {
   ChevronDown,
@@ -29,7 +29,7 @@ import {
   FileSearch2,
   Ticket,
   Replace,
-  Menu, // Added Menu icon
+  Menu,
 } from 'lucide-react';
 
 interface SidebarNavItem {
@@ -109,9 +109,8 @@ const SidebarNavItemContent: React.FC<{ item: SidebarNavItem; level: number; sea
 
   const isMatch = searchTerm && item.label.toLowerCase().includes(searchTerm.toLowerCase());
   
-  // Determine if this item or any of its children (recursively) should be visible based on search
   const shouldBeVisible = (currentItem: SidebarNavItem): boolean => {
-    if (!searchTerm) return true; // Always visible if no search term
+    if (!searchTerm) return true; 
     if (currentItem.label.toLowerCase().includes(searchTerm.toLowerCase())) return true;
     if (currentItem.children) {
       return currentItem.children.some(child => shouldBeVisible(child));
@@ -120,7 +119,7 @@ const SidebarNavItemContent: React.FC<{ item: SidebarNavItem; level: number; sea
   };
 
   if (searchTerm && !shouldBeVisible(item)) {
-    return null; // Hide item if it and its children don't match search
+    return null; 
   }
 
   return (
@@ -183,7 +182,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   return (
     <div className="flex flex-col h-screen bg-slate-100">
       
-      {/* Mobile Header with Hamburger Menu */}
       <div className="md:hidden flex items-center justify-between p-2 border-b border-slate-300 bg-slate-50">
         <Sheet open={isMobileSheetOpen} onOpenChange={setIsMobileSheetOpen}>
           <SheetTrigger asChild>
@@ -192,15 +190,18 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <span className="sr-only">開啟選單</span>
             </Button>
           </SheetTrigger>
-          <SheetContent side="left" className="p-0 w-64 bg-slate-50 border-r border-slate-300">
+          <SheetContent side="left" className="p-0 w-64 bg-slate-50 border-r border-slate-300 flex flex-col">
+            <SheetHeader className="p-4 border-b">
+              <SheetTitle className="text-sky-700 text-left text-lg">選單</SheetTitle>
+            </SheetHeader>
             <SidebarContent />
           </SheetContent>
         </Sheet>
         <h1 className="text-lg font-semibold text-sky-700">儀表板</h1>
-        <div className="w-8"></div> {/* Spacer to balance the button */}
+        <div className="w-8"></div> 
       </div>
 
-      <div className="flex flex-1 overflow-hidden"> 
+      <div className="flex flex-1 overflow-hidden pt-2 md:pt-0"> 
         <aside className="hidden md:flex w-56 bg-slate-50 border-r border-slate-300 flex-col">
           <SidebarContent />
         </aside>
