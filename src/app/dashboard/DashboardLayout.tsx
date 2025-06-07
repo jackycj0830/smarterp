@@ -20,14 +20,14 @@ import {
   Home,
   Star,
   HardDriveDownload,
-  TerminalSquare,
-  UserPlus,
-  KeyRound,
   FileCode,
   UsersRound,
   FileLock2,
   Settings2,
   Bell,
+  FileSearch2, // Added
+  Ticket,      // Added
+  Replace,     // Added
 } from 'lucide-react';
 
 interface SidebarNavItem {
@@ -72,18 +72,13 @@ const sidebarNavItems: SidebarNavItem[] = [
     { id: 'ssys-ship', label: '銷貨單', icon: Receipt },
   ]},
   { id: 'inventory-system', label: '庫存系統', icon: Home, children: [
-    { id: 'isys-query', label: '庫存查詢', icon: FileSearch2IconProperty },
+    { id: 'isys-query', label: '庫存查詢', icon: FileSearch2 },
     { id: 'isys-transfer', label: '調撥作業', icon: Replace },
   ]},
-  { id: 'invoice-system', label: '發票系統', icon: TicketIconProperty, children: [
+  { id: 'invoice-system', label: '發票系統', icon: Ticket, children: [
     { id: 'invsys-einvoice', label: '電子發票', icon: Mail },
   ]},
 ];
-
-// Placeholder icons if specific ones are not found or for variety
-const FileSearch2IconProperty = FileText; // Using FileText as a placeholder for FileSearch2
-const TicketIconProperty = Receipt; // Using Receipt as a placeholder for Ticket
-const Replace = FileText; // Using FileText as a placeholder
 
 const SidebarNavItemContent: React.FC<{ item: SidebarNavItem; level: number; searchTerm: string }> = ({ item, level, searchTerm }) => {
   const [isOpen, setIsOpen] = React.useState(level === 0 || (searchTerm && item.label.toLowerCase().includes(searchTerm.toLowerCase())));
@@ -105,7 +100,7 @@ const SidebarNavItemContent: React.FC<{ item: SidebarNavItem; level: number; sea
          setIsOpen(false);
       }
     } else {
-       setIsOpen(level === 0); // Default open for top-level items if no search term
+       setIsOpen(level === 0); 
     }
   }, [searchTerm, item.label, item.children, level]);
 
@@ -115,7 +110,7 @@ const SidebarNavItemContent: React.FC<{ item: SidebarNavItem; level: number; sea
 
   if (searchTerm && !isMatch && !hasVisibleChild && item.children && item.children.length > 0 && !item.children.some(child => child.label.toLowerCase().includes(searchTerm.toLowerCase()) || child.children?.some(c => c.label.toLowerCase().includes(searchTerm.toLowerCase())))) {
     let parentHasMatch = false;
-    // This logic might need to be passed down or handled globally if deep nested search highlighting is needed across non-expanded parents
+    
     if (searchTerm && !item.label.toLowerCase().includes(searchTerm.toLowerCase())) {
         const checkChildren = (children?: SidebarNavItem[]): boolean => {
             if (!children) return false;
@@ -160,9 +155,11 @@ const SidebarContent: React.FC = () => {
     return (
       <>
         <div className="p-2 border-b border-slate-300">
-          <Input 
+          {/* Using a regular input, assuming shadcn Input might not be styled for this specific context or to avoid import if not needed */}
+          <input 
+            type="text"
             placeholder="搜尋選單..." 
-            className="h-8 text-xs"
+            className="h-8 text-xs w-full px-2 py-1 border border-slate-300 rounded-md focus:ring-sky-500 focus:border-sky-500"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -182,8 +179,8 @@ const SidebarContent: React.FC = () => {
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex flex-col h-screen bg-slate-100">
-      {/* Menubar has been removed as per user request */}
-      <div className="flex flex-1 overflow-hidden pt-2 md:pt-0"> {/* Added padding top for when menubar is removed */}
+      
+      <div className="flex flex-1 overflow-hidden pt-2 md:pt-0"> 
         <aside className="hidden md:flex w-56 bg-slate-50 border-r border-slate-300 flex-col">
           <SidebarContent />
         </aside>
@@ -195,3 +192,4 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     </div>
   );
 }
+
