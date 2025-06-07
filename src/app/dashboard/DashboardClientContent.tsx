@@ -12,8 +12,8 @@ import {
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-  Autoplay
 } from "@/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
 import {
   Settings,
   TerminalSquare,
@@ -79,6 +79,37 @@ export default function DashboardClientContent() {
   return (
     <div className="flex-1 flex flex-col p-4 bg-background">
       
+      <div className="mb-6 p-4 rounded-lg bg-card shadow">
+        <h2 className="text-lg font-semibold text-primary mb-3 flex items-center">
+          <Megaphone className="w-5 h-5 mr-2" />
+          公司相關最新消息和公告
+        </h2>
+        <Carousel
+          opts={{
+            align: "start",
+            loop: true,
+          }}
+          plugins={[autoplayPlugin.current]}
+          className="w-full"
+        >
+          <CarouselContent>
+            {announcements.map((announcement, index) => (
+              <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
+                <div className="p-1">
+                  <Card className="bg-muted/50">
+                    <CardContent className="flex items-center justify-center p-4 h-24">
+                      <p className="text-sm text-muted-foreground text-center">{announcement}</p>
+                    </CardContent>
+                  </Card>
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious className="left-2 disabled:opacity-30" />
+          <CarouselNext className="right-2 disabled:opacity-30" />
+        </Carousel>
+      </div>
+
       <div className="border-t border-b border-primary mb-4 bg-primary">
         <Tabs defaultValue="system-maintenance-main" onValueChange={setActiveSecondaryTab}>
           <TabsList className="bg-primary p-0 rounded-none justify-start h-8">
@@ -120,37 +151,6 @@ export default function DashboardClientContent() {
         </div>
       )}
       
-      <div className="mt-6 p-4 rounded-lg bg-card shadow">
-        <h2 className="text-lg font-semibold text-primary mb-3 flex items-center">
-          <Megaphone className="w-5 h-5 mr-2" />
-          公司相關最新消息和公告
-        </h2>
-        <Carousel
-          opts={{
-            align: "start",
-            loop: true,
-          }}
-          plugins={[autoplayPlugin.current]}
-          className="w-full"
-        >
-          <CarouselContent>
-            {announcements.map((announcement, index) => (
-              <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
-                <div className="p-1">
-                  <Card className="bg-muted/50">
-                    <CardContent className="flex items-center justify-center p-4 h-24">
-                      <p className="text-sm text-muted-foreground text-center">{announcement}</p>
-                    </CardContent>
-                  </Card>
-                </div>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <CarouselPrevious className="left-2 disabled:opacity-30" />
-          <CarouselNext className="right-2 disabled:opacity-30" />
-        </Carousel>
-      </div>
-
       <div className="mt-auto pt-8 text-center">
         <Image src="https://placehold.co/300x60.png?text=ERP+System+Branding" data-ai-hint="company logo abstract" alt="ERP Branding" width={150} height={30} className="mx-auto opacity-70" />
       </div>
