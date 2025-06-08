@@ -9,7 +9,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { User, Eye } from 'lucide-react';
 import Image from 'next/image';
 import { useToast } from '@/hooks/use-toast';
-import qrCodeLoginImage from './public/qr_code_login.png'; // 匯入圖片
 
 const translations = {
   zh: {
@@ -100,7 +99,7 @@ export default function LoginPage() {
             
             <div className="flex justify-center my-6 md:my-0">
               <Image 
-                src={qrCodeLoginImage} 
+                src="/qr_code_login.png" 
                 width={210}
                 height={210}
                 data-ai-hint="QR code" 
