@@ -5,7 +5,7 @@
 
 ## 專案概述
 
-ERP Central 是一個現代化的企業資源規劃 (ERP) 系統原型，旨在提供一套整合的解決方案來管理中小型企業的核心業務流程。系統將涵蓋基礎資料管理、進銷存、以及可能的 AI 輔助功能。
+Smart ERP iSM 是一個現代化的企業資源規劃 (ERP) 系統原型，旨在提供一套整合的解決方案來管理中小型企業的核心業務流程。系統將涵蓋基礎資料管理、進銷存、以及可能的 AI 輔助功能。
 
 ## 核心功能模組
 
@@ -76,7 +76,7 @@ sequenceDiagram
     end
 ```
 
-*TODO: 為 ERP Central 的核心模組 (如庫存管理、訂單處理、客戶關係等) 創建詳細的循序圖。*
+*TODO: 為 Smart ERP iSM 的核心模組 (如庫存管理、訂單處理、客戶關係等) 創建詳細的循序圖。*
 
 ### 系統類別圖 (Class Diagram)
 
@@ -144,7 +144,7 @@ classDiagram
     OrderItem "1" -- "1" Product : refersTo
 ```
 
-*TODO: 擴展此類別圖以包含 ERP Central 系統的所有主要實體和它們之間的關係，例如廠商 (Vendor)、採購單 (PurchaseOrder) 等。*
+*TODO: 擴展此類別圖以包含 Smart ERP iSM 系統的所有主要實體和它們之間的關係，例如廠商 (Vendor)、採購單 (PurchaseOrder) 等。*
 
 ### 業務流程圖 (Business Process Flow)
 
@@ -168,7 +168,7 @@ graph TD
     B -- 資料無效 --> O[提示錯誤訊息給客戶];
 ```
 
-*TODO: 為 ERP Central 的核心業務流程 (如採購流程、庫存入庫流程、退貨流程等) 創建詳細的流程圖。*
+*TODO: 為 Smart ERP iSM 的核心業務流程 (如採購流程、庫存入庫流程、退貨流程等) 創建詳細的流程圖。*
 
 ### 實體關聯圖 (ERD - Conceptual)
 
@@ -185,4 +185,5 @@ graph TD
 - **可靠性**: 系統應穩定運行，減少錯誤和崩潰。
 
 使用 RefactorFlow 中的 AI 建議功能，以保持此文件與您的 README 和待辦事項清單同步。
-```
+
+    

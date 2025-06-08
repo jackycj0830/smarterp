@@ -1,11 +1,11 @@
 
-# ERP Central 專案
+# Smart ERP iSM 專案
 
-歡迎使用 ERP Central！這是一個基於 Next.js、React、ShadCN UI、Tailwind CSS 和 Genkit AI 技術棧打造的現代化企業資源規劃 (ERP) 系統原型。
+歡迎使用 Smart ERP iSM！這是一個基於 Next.js、React、ShadCN UI、Tailwind CSS 和 Genkit AI 技術棧打造的現代化企業資源規劃 (ERP) 系統原型。
 
 ## 專案目標
 
-ERP Central 旨在提供一個可擴展、易於維護且功能豐富的 ERP 解決方案，協助中小型企業更有效地管理其核心業務流程。此原型致力於探索現代 Web 技術在企業級應用中的潛力，並整合 AI 功能以提升使用者體驗和業務效率。
+Smart ERP iSM 旨在提供一個可擴展、易於維護且功能豐富的 ERP 解決方案，協助中小型企業更有效地管理其核心業務流程。此原型致力於探索現代 Web 技術在企業級應用中的潛力，並整合 AI 功能以提升使用者體驗和業務效率。
 
 ## 主要技術棧
 
@@ -18,7 +18,7 @@ ERP Central 旨在提供一個可擴展、易於維護且功能豐富的 ERP 解
 
 ## 技術架構
 
-ERP Central 採用了現代化的 Web 技術棧，以實現高效能、可維護和可擴展的應用程式：
+Smart ERP iSM 採用了現代化的 Web 技術棧，以實現高效能、可維護和可擴展的應用程式：
 
 *   **Next.js App Router**: 利用最新的 Next.js 路由機制，支援巢狀路由、佈局 (Layouts) 和伺服器元件 (Server Components)，以優化載入時間和減少客戶端 JavaScript。
 *   **React Server Components (RSC)**: 預設使用伺服器元件來處理大部分的渲染邏輯，從而減少傳輸到客戶端的 JavaScript 數量，提升初始頁面載入速度。
@@ -148,7 +148,7 @@ yarn start
 
 ## 本地化 (Localization)
 
-ERP Central 目前在登入頁面 (`src/app/login/page.tsx`) 中實作了基本的中文(繁體)和英文的本地化切換功能。這是透過在元件內部維護一個 `translations` 物件來實現的。
+Smart ERP iSM 目前在登入頁面 (`src/app/login/page.tsx`) 中實作了基本的中文(繁體)和英文的本地化切換功能。這是透過在元件內部維護一個 `translations` 物件來實現的。
 
 未來可以考慮擴展此功能：
 *   將翻譯內容抽取到獨立的 JSON 或 JS 檔案中，方便管理。
@@ -178,4 +178,5 @@ ERP Central 目前在登入頁面 (`src/app/login/page.tsx`) 中實作了基本�
 ## 授權
 
 此專案採用 [ISC](LICENSE.md) 授權 (請根據您的實際授權情況修改)。
-```
+
+    
